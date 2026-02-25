@@ -46,7 +46,7 @@ class DOM_Program_Card_Module extends ET_Builder_Module
 
     public function render($attrs, $content = null, $render_slug = ''): string
     {
-        $selected_program = isset($this->props['program_id']) ? (string) $this->props['program_id'] : '';
+        $selected_program = $this->resolve_selected_program($attrs);
         $program_id = DOM_Programs::resolve_program_selection($selected_program);
 
         if (! $program_id || get_post_type($program_id) !== DOM_Programs::POST_TYPE) {
@@ -197,5 +197,54 @@ class DOM_Program_Card_Module extends ET_Builder_Module
         }
 
         return trim($legacy_badge);
+    }
+
+    private function resolve_selected_program($attrs): string
+    {
+        $candidate_values = array();
+        $lookup_keys = array(
+            'program_id',
+            'program',
+            'offering',
+            'selected_program',
+        );
+
+        foreach ($lookup_keys as $key) {
+            if (isset($this->props[$key]) && is_scalar($this->props[$key])) {
+                $candidate_values[] = (string) $this->props[$key];
+            }
+
+            if (is_array($attrs) && isset($attrs[$key]) && is_scalar($attrs[$key])) {
+                $candidate_values[] = (string) $attrs[$key];
+            }
+        }
+
+        foreach ($this->props as $key => $value) {
+            if (! is_string($key) || strpos($key, 'program_id') !== 0 || ! is_scalar($value)) {
+                continue;
+            }
+
+            $candidate_values[] = (string) $value;
+        }
+
+        if (is_array($attrs)) {
+            foreach ($attrs as $key => $value) {
+                if (! is_string($key) || strpos($key, 'program_id') !== 0 || ! is_scalar($value)) {
+                    continue;
+                }
+
+                $candidate_values[] = (string) $value;
+            }
+        }
+
+        foreach ($candidate_values as $candidate) {
+            $candidate = trim($candidate);
+
+            if ($candidate !== '') {
+                return $candidate;
+            }
+        }
+
+        return '';
     }
 }

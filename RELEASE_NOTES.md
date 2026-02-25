@@ -1,5 +1,14 @@
 # Release Notes
 
+## v1.0.21 — 2026-02-25
+
+### Fixed
+- Prevented selected Offering values from being dropped on frontend renders when Divi stores or validates select values differently per page/module context.
+
+### Technical
+- Updated `DOM_Programs::get_program_options()` to provide consistent option availability outside admin.
+- Added robust selection key/value fallbacks in `DOM_Program_Card_Module::render()`.
+
 ## v1.0.20 — 2026-02-25
 
 ### Fixed

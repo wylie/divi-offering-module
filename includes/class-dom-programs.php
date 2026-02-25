@@ -383,7 +383,7 @@ class DOM_Programs
         $posts = get_posts(array(
             'post_type' => self::POST_TYPE,
             'numberposts' => -1,
-            'post_status' => is_admin() ? array('publish', 'draft', 'pending', 'private', 'future') : 'publish',
+            'post_status' => array('publish', 'draft', 'pending', 'private', 'future'),
             'orderby' => 'title',
             'order' => 'ASC',
         ));

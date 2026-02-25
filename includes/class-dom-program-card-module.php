@@ -96,7 +96,7 @@ class DOM_Program_Card_Module extends ET_Builder_Module
             <div class="side right">
             <div class="dom-content info">
                 <?php if ($pill_text !== '') : ?>
-                    <div class="dom-badge location"><?php echo esc_html($pill_text); ?></div>
+                    <div class="dom-badge dom-location"><?php echo esc_html($pill_text); ?></div>
                 <?php endif; ?>
 
                 <div class="heading">

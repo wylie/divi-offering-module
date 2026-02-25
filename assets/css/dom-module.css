@@ -67,7 +67,7 @@
   font-size: 21px;
 }
 
-.dom-program-card.offering .location {
+.dom-program-card.offering .dom-location {
   display: inline-block;
   padding: 0 0.5rem;
   margin: 0 0 1rem;
@@ -203,39 +203,39 @@
   padding-bottom: 20px;
 }
 
-.dom-program-card.offering.bike .location {
+.dom-program-card.offering.bike .dom-location {
   background: #00caff;
 }
 
-.dom-program-card.offering.climb .location {
+.dom-program-card.offering.climb .dom-location {
   background: #00cc2d;
 }
 
-.dom-program-card.offering.fitness .location {
+.dom-program-card.offering.fitness .dom-location {
   background: #ff7b00;
 }
 
-.dom-program-card.offering.camp .location {
+.dom-program-card.offering.camp .dom-location {
   background: #ff3366;
 }
 
-.dom-program-card.offering.club .location {
+.dom-program-card.offering.club .dom-location {
   background: #b967ff;
 }
 
-.dom-program-card.offering.team .location {
+.dom-program-card.offering.team .dom-location {
   background: #ffd200;
 }
 
-.dom-program-card.offering.pass .location {
+.dom-program-card.offering.pass .dom-location {
   background: #0099ff;
 }
 
-.dom-program-card.offering.membership .location {
+.dom-program-card.offering.membership .dom-location {
   background: #00bfa5;
 }
 
-.dom-program-card.offering.gift .location {
+.dom-program-card.offering.gift .dom-location {
   background: #ff5555;
 }
 

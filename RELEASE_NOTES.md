@@ -1,5 +1,14 @@
 # Release Notes
 
+## v1.0.14 — 2026-02-25
+
+### Fixed
+- Included the pill class namespace update in the release (`location` → `dom-location`) to prevent duplicated pill text from external CSS collisions.
+
+### Technical
+- Shipped updates in `includes/class-dom-program-card-module.php` and `assets/css/dom-module.css`.
+- Updated plugin version metadata to `1.0.14` in `divi-offering-module.php`.
+
 ## v1.0.13 — 2026-02-25
 
 ### Fixed

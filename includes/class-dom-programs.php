@@ -182,6 +182,17 @@ class DOM_Programs
             </div>
 
             <div class="dom-field">
+                <label for="dom_mobile_image_position"><?php esc_html_e('Mobile Image Position', 'divi-offering-module'); ?></label>
+                <select id="dom_mobile_image_position" name="dom_mobile_image_position">
+                    <option value="center center" <?php selected($meta['mobile_image_position'], 'center center'); ?>><?php esc_html_e('Center', 'divi-offering-module'); ?></option>
+                    <option value="center top" <?php selected($meta['mobile_image_position'], 'center top'); ?>><?php esc_html_e('Top', 'divi-offering-module'); ?></option>
+                    <option value="center bottom" <?php selected($meta['mobile_image_position'], 'center bottom'); ?>><?php esc_html_e('Bottom', 'divi-offering-module'); ?></option>
+                    <option value="left center" <?php selected($meta['mobile_image_position'], 'left center'); ?>><?php esc_html_e('Left', 'divi-offering-module'); ?></option>
+                    <option value="right center" <?php selected($meta['mobile_image_position'], 'right center'); ?>><?php esc_html_e('Right', 'divi-offering-module'); ?></option>
+                </select>
+            </div>
+
+            <div class="dom-field">
                 <label for="dom_badge_color"><?php esc_html_e('Badge Color', 'divi-offering-module'); ?></label>
                 <input id="dom_badge_color" name="dom_badge_color" type="color" value="<?php echo esc_attr($meta['badge_color']); ?>">
             </div>
@@ -234,6 +245,7 @@ class DOM_Programs
             'schedule',
             'button_text',
             'image_side',
+            'mobile_image_position',
         );
 
         foreach ($text_fields as $field) {
@@ -243,6 +255,18 @@ class DOM_Programs
             if ($field === 'type') {
                 $allowed = array_keys(self::get_type_options());
                 $val = in_array($val, $allowed, true) ? $val : '';
+            }
+
+            if ($field === 'mobile_image_position') {
+                $allowed_positions = array(
+                    'center center',
+                    'center top',
+                    'center bottom',
+                    'left center',
+                    'right center',
+                );
+
+                $val = in_array($val, $allowed_positions, true) ? $val : 'center center';
             }
 
             update_post_meta($post_id, $key, $val);
@@ -278,6 +302,7 @@ class DOM_Programs
             'button_text' => get_post_meta($post_id, 'dom_button_text', true),
             'button_url' => get_post_meta($post_id, 'dom_button_url', true),
             'image_side' => get_post_meta($post_id, 'dom_image_side', true) ?: 'left',
+            'mobile_image_position' => get_post_meta($post_id, 'dom_mobile_image_position', true) ?: 'center center',
             'badge_color' => get_post_meta($post_id, 'dom_badge_color', true) ?: '#9A62F9',
             'card_bg' => get_post_meta($post_id, 'dom_card_bg', true) ?: '#efefef',
             'accent_color' => get_post_meta($post_id, 'dom_accent_color', true) ?: '#AF4F27',

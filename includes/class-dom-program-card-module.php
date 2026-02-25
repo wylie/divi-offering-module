@@ -76,11 +76,12 @@ class DOM_Program_Card_Module extends ET_Builder_Module
         }
 
         $styles = sprintf(
-            '--dom-card-bg:%1$s;--dom-badge-bg:%2$s;--dom-accent:%3$s;--dom-button-border:%4$s;',
+            '--dom-card-bg:%1$s;--dom-badge-bg:%2$s;--dom-accent:%3$s;--dom-button-border:%4$s;--dom-mobile-image-position:%5$s;',
             esc_attr($meta['card_bg']),
             esc_attr($meta['badge_color']),
             esc_attr($meta['accent_color']),
-            esc_attr($meta['button_border_color'])
+            esc_attr($meta['button_border_color']),
+            esc_attr($meta['mobile_image_position'])
         );
 
         ob_start();

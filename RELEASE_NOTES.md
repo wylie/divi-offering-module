@@ -1,5 +1,17 @@
 # Release Notes
 
+## v1.0.12 — 2026-02-25
+
+### Added
+- Added a per-Offering **Mobile Image Position** setting in Add/Edit Offering (Center, Top, Bottom, Left, Right).
+
+### Improved
+- Applied each Offering's mobile image position only on mobile breakpoints.
+- Kept desktop image positioning centered.
+
+### Technical
+- Updated plugin version metadata to `1.0.12` in `divi-offering-module.php`.
+
 ## v1.0.11 — 2026-02-25
 
 ### Improved

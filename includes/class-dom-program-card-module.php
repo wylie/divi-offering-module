@@ -89,11 +89,11 @@ class DOM_Program_Card_Module extends ET_Builder_Module
                 <?php endif; ?>
 
                 <div class="dom-details-grid">
-                    <?php echo $this->render_detail_item('$', $meta['price']); ?>
-                    <?php echo $this->render_detail_item('↻', $meta['frequency']); ?>
-                    <?php echo $this->render_detail_item('◔', $meta['time']); ?>
-                    <?php echo $this->render_detail_item('👥', $meta['ages']); ?>
-                    <?php echo $this->render_detail_item('▦', $meta['schedule'], true); ?>
+                    <?php echo $this->render_detail_item('price', $meta['price']); ?>
+                    <?php echo $this->render_detail_item('frequency', $meta['frequency']); ?>
+                    <?php echo $this->render_detail_item('time', $meta['time']); ?>
+                    <?php echo $this->render_detail_item('ages', $meta['ages']); ?>
+                    <?php echo $this->render_detail_item('schedule', $meta['schedule'], true); ?>
                 </div>
 
                 <?php if (! empty($meta['description'])) : ?>
@@ -112,19 +112,38 @@ class DOM_Program_Card_Module extends ET_Builder_Module
         return (string) ob_get_clean();
     }
 
-    private function render_detail_item(string $icon, string $value, bool $full_width = false): string
+    private function render_detail_item(string $icon_key, string $value, bool $full_width = false): string
     {
         if (trim($value) === '') {
             return '';
         }
 
         $classes = 'dom-detail-item' . ($full_width ? ' dom-full-width' : '');
+        $icon_svg = $this->render_icon_svg($icon_key);
 
         return sprintf(
             '<div class="%1$s"><span class="dom-icon" aria-hidden="true">%2$s</span><span>%3$s</span></div>',
             esc_attr($classes),
-            esc_html($icon),
+            $icon_svg,
             esc_html($value)
         );
+    }
+
+    private function render_icon_svg(string $icon_key): string
+    {
+        switch ($icon_key) {
+            case 'price':
+                return '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 1a10 10 0 1 0 10 10A10 10 0 0 0 12 1Zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8Z"></path><path d="M13.4 7.7c1.4.2 2.3 1.1 2.3 2.3h-2a.6.6 0 0 0-.2-.5 1.8 1.8 0 0 0-1-.4v2.7c2.1.4 3.3 1.3 3.3 3.1 0 1.7-1.2 2.9-3.3 3.1V20h-1.1v-1.9c-2-.2-3.3-1.4-3.4-3.3h2c.1.8.6 1.4 1.4 1.6v-2.8C9.8 13.2 8.7 12.4 8.7 10.8c0-1.7 1.2-2.9 3-3.1V6h1.1Zm-1.9 3.4v-2a1.1 1.1 0 0 0-1.1 1c0 .5.3.8 1.1 1Zm1.1 2.5v2.2a1.3 1.3 0 0 0 1.3-1.1c0-.6-.3-1-1.3-1.1Z"></path></svg>';
+            case 'frequency':
+                return '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 4V1L8 5l4 4V6a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8Z"></path></svg>';
+            case 'time':
+                return '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8Z"></path><path d="M12.8 7h-1.6v6l5 3 .8-1.3-4.2-2.5Z"></path></svg>';
+            case 'ages':
+                return '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 19a5.5 5.5 0 0 1 11 0v1h-11Z"></path><circle cx="17" cy="9" r="2.5"></circle><path d="M14.5 20a4.5 4.5 0 0 1 9 0v1h-9Z"></path></svg>';
+            case 'schedule':
+                return '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M7 2h2v2h6V2h2v2h3v18H4V4h3Zm11 8H6v10h12Zm0-4H6v2h12Z"></path></svg>';
+            default:
+                return '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="2"></circle></svg>';
+        }
     }
 }

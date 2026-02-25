@@ -225,7 +225,7 @@ class DOM_Programs
         $posts = get_posts(array(
             'post_type' => self::POST_TYPE,
             'numberposts' => -1,
-            'post_status' => 'publish',
+            'post_status' => is_admin() ? array('publish', 'draft', 'pending', 'private', 'future') : 'publish',
             'orderby' => 'title',
             'order' => 'ASC',
         ));
@@ -259,6 +259,20 @@ class DOM_Programs
             return get_post_type($program_id) === self::POST_TYPE ? $program_id : 0;
         }
 
+        if (preg_match('/program[_-](\d+)/i', $selected_program, $matches) === 1) {
+            $program_id = absint($matches[1]);
+
+            return get_post_type($program_id) === self::POST_TYPE ? $program_id : 0;
+        }
+
+        if (preg_match('/\b(\d+)\b/', $selected_program, $matches) === 1) {
+            $program_id = absint($matches[1]);
+
+            if (get_post_type($program_id) === self::POST_TYPE) {
+                return $program_id;
+            }
+        }
+
         $found_by_title = get_page_by_title($selected_program, OBJECT, self::POST_TYPE);
 
         if ($found_by_title instanceof \WP_Post) {
@@ -270,6 +284,23 @@ class DOM_Programs
 
         if ($found_by_slug instanceof \WP_Post) {
             return (int) $found_by_slug->ID;
+        }
+
+        $all_programs = get_posts(array(
+            'post_type' => self::POST_TYPE,
+            'numberposts' => -1,
+            'post_status' => array('publish', 'draft', 'pending', 'private', 'future'),
+        ));
+
+        $selected_program_normalized = strtolower(trim(wp_strip_all_tags($selected_program)));
+
+        foreach ($all_programs as $program_post) {
+            $candidate_title = strtolower(trim((string) $program_post->post_title));
+            $candidate_slug = strtolower(trim((string) $program_post->post_name));
+
+            if ($selected_program_normalized === $candidate_title || $selected_program_normalized === $candidate_slug) {
+                return (int) $program_post->ID;
+            }
         }
 
         return 0;

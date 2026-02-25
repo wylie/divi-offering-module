@@ -72,34 +72,34 @@ class DOM_Programs
         <div class="dom-grid">
             <div class="dom-field">
                 <label for="dom_badge"><?php esc_html_e('Badge Label', 'divi-offering-module'); ?></label>
-                <input id="dom_badge" name="dom_badge" type="text" value="<?php echo esc_attr($meta['badge']); ?>" placeholder="CLUB">
+                <input id="dom_badge" name="dom_badge" type="text" value="<?php echo esc_attr($meta['badge']); ?>" placeholder="Title">
             </div>
             <div class="dom-field">
                 <label for="dom_subtitle"><?php esc_html_e('Subtitle / Tagline', 'divi-offering-module'); ?></label>
-                <input id="dom_subtitle" name="dom_subtitle" type="text" value="<?php echo esc_attr($meta['subtitle']); ?>" placeholder="Short subtitle or tagline">
+                <input id="dom_subtitle" name="dom_subtitle" type="text" value="<?php echo esc_attr($meta['subtitle']); ?>" placeholder="Subtitle">
             </div>
 
             <div class="dom-field">
                 <label for="dom_price"><?php esc_html_e('Price', 'divi-offering-module'); ?></label>
-                <input id="dom_price" name="dom_price" type="text" value="<?php echo esc_attr($meta['price']); ?>" placeholder="$99">
+                <input id="dom_price" name="dom_price" type="text" value="<?php echo esc_attr($meta['price']); ?>" placeholder="How much does this cost?">
             </div>
             <div class="dom-field">
                 <label for="dom_frequency"><?php esc_html_e('Frequency', 'divi-offering-module'); ?></label>
-                <input id="dom_frequency" name="dom_frequency" type="text" value="<?php echo esc_attr($meta['frequency']); ?>" placeholder="Weekly">
+                <input id="dom_frequency" name="dom_frequency" type="text" value="<?php echo esc_attr($meta['frequency']); ?>" placeholder="Does this repeat, and at one cadence?">
             </div>
 
             <div class="dom-field">
                 <label for="dom_time"><?php esc_html_e('Time', 'divi-offering-module'); ?></label>
-                <input id="dom_time" name="dom_time" type="text" value="<?php echo esc_attr($meta['time']); ?>" placeholder="4:00-6:00 PM">
+                <input id="dom_time" name="dom_time" type="text" value="<?php echo esc_attr($meta['time']); ?>" placeholder="How long or what time does this occur?">
             </div>
             <div class="dom-field">
                 <label for="dom_ages"><?php esc_html_e('Age Range', 'divi-offering-module'); ?></label>
-                <input id="dom_ages" name="dom_ages" type="text" value="<?php echo esc_attr($meta['ages']); ?>" placeholder="Ages 8-12">
+                <input id="dom_ages" name="dom_ages" type="text" value="<?php echo esc_attr($meta['ages']); ?>" placeholder="Who can attend this?">
             </div>
 
             <div class="dom-field" style="grid-column: span 2;">
                 <label for="dom_schedule"><?php esc_html_e('Schedule', 'divi-offering-module'); ?></label>
-                <input id="dom_schedule" name="dom_schedule" type="text" value="<?php echo esc_attr($meta['schedule']); ?>" placeholder="Tuesdays and Thursdays, March-May">
+                <input id="dom_schedule" name="dom_schedule" type="text" value="<?php echo esc_attr($meta['schedule']); ?>" placeholder="When does this occur?">
             </div>
 
             <div class="dom-field" style="grid-column: span 2;">

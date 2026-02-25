@@ -82,11 +82,10 @@
   line-height: 1;
 }
 
-.dom-detail-item .dom-icon svg {
-  width: 20px;
-  height: 20px;
-  display: block;
-  fill: currentColor;
+.dom-detail-item .dom-icon i {
+  font-size: 20px;
+  line-height: 1;
+  color: inherit;
 }
 
 .dom-full-width {

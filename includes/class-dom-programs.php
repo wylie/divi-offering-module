@@ -405,43 +405,14 @@ class DOM_Programs
             return 0;
         }
 
-        if (is_numeric($selected_program)) {
-            $program_id = absint($selected_program);
+        $candidates = self::build_selection_candidates($selected_program);
 
-            return get_post_type($program_id) === self::POST_TYPE ? $program_id : 0;
-        }
+        foreach ($candidates as $candidate) {
+            $program_id = self::resolve_program_id_candidate($candidate);
 
-        if (strpos($selected_program, 'program_') === 0) {
-            $program_id = absint(substr($selected_program, 8));
-
-            return get_post_type($program_id) === self::POST_TYPE ? $program_id : 0;
-        }
-
-        if (preg_match('/program[_-](\d+)/i', $selected_program, $matches) === 1) {
-            $program_id = absint($matches[1]);
-
-            return get_post_type($program_id) === self::POST_TYPE ? $program_id : 0;
-        }
-
-        if (preg_match('/\b(\d+)\b/', $selected_program, $matches) === 1) {
-            $program_id = absint($matches[1]);
-
-            if (get_post_type($program_id) === self::POST_TYPE) {
+            if ($program_id > 0) {
                 return $program_id;
             }
-        }
-
-        $found_by_title = get_page_by_title($selected_program, OBJECT, self::POST_TYPE);
-
-        if ($found_by_title instanceof \WP_Post) {
-            return (int) $found_by_title->ID;
-        }
-
-        $slug = sanitize_title($selected_program);
-        $found_by_slug = get_page_by_path($slug, OBJECT, self::POST_TYPE);
-
-        if ($found_by_slug instanceof \WP_Post) {
-            return (int) $found_by_slug->ID;
         }
 
         $all_programs = get_posts(array(
@@ -450,14 +421,110 @@ class DOM_Programs
             'post_status' => array('publish', 'draft', 'pending', 'private', 'future'),
         ));
 
-        $selected_program_normalized = strtolower(trim(wp_strip_all_tags($selected_program)));
+        foreach ($candidates as $candidate) {
+            $normalized_candidate = strtolower(trim(wp_strip_all_tags($candidate)));
 
-        foreach ($all_programs as $program_post) {
-            $candidate_title = strtolower(trim((string) $program_post->post_title));
-            $candidate_slug = strtolower(trim((string) $program_post->post_name));
+            if ($normalized_candidate === '') {
+                continue;
+            }
 
-            if ($selected_program_normalized === $candidate_title || $selected_program_normalized === $candidate_slug) {
-                return (int) $program_post->ID;
+            foreach ($all_programs as $program_post) {
+                $candidate_title = strtolower(trim((string) $program_post->post_title));
+                $candidate_slug = strtolower(trim((string) $program_post->post_name));
+
+                if ($normalized_candidate === $candidate_title || $normalized_candidate === $candidate_slug) {
+                    return (int) $program_post->ID;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    private static function build_selection_candidates(string $selected_program): array
+    {
+        $decoded = html_entity_decode($selected_program, ENT_QUOTES, 'UTF-8');
+
+        $candidates = array($selected_program, $decoded, trim(wp_strip_all_tags($decoded)));
+
+        $url_like = preg_match('#^https?://#i', $decoded) === 1 ? $decoded : 'https://example.com/' . ltrim($decoded, '/');
+        $parsed_path = wp_parse_url($url_like, PHP_URL_PATH);
+
+        if (is_string($parsed_path) && $parsed_path !== '') {
+            $parsed_path = trim($parsed_path, '/');
+
+            if ($parsed_path !== '') {
+                $segments = explode('/', $parsed_path);
+                $last_segment = end($segments);
+
+                if (is_string($last_segment) && $last_segment !== '') {
+                    $candidates[] = $last_segment;
+                }
+
+                $candidates[] = $parsed_path;
+            }
+        }
+
+        $tokens = preg_split('/\s*(?:\||,|;|=>|::)\s*/', $decoded) ?: array();
+
+        foreach ($tokens as $token) {
+            $token = trim((string) $token);
+
+            if ($token !== '') {
+                $candidates[] = $token;
+            }
+        }
+
+        $normalized_candidates = array();
+
+        foreach ($candidates as $candidate) {
+            $candidate = trim((string) $candidate);
+
+            if ($candidate === '') {
+                continue;
+            }
+
+            $normalized_candidates[] = $candidate;
+        }
+
+        return array_values(array_unique($normalized_candidates));
+    }
+
+    private static function resolve_program_id_candidate(string $candidate): int
+    {
+        if ($candidate === '') {
+            return 0;
+        }
+
+        if (is_numeric($candidate)) {
+            $program_id = absint($candidate);
+
+            if ($program_id > 0 && get_post_type($program_id) === self::POST_TYPE) {
+                return $program_id;
+            }
+        }
+
+        if (preg_match('/program[_-]?(\d+)/i', $candidate, $matches) === 1) {
+            $program_id = absint($matches[1]);
+
+            if ($program_id > 0 && get_post_type($program_id) === self::POST_TYPE) {
+                return $program_id;
+            }
+        }
+
+        $found_by_title = get_page_by_title($candidate, OBJECT, self::POST_TYPE);
+
+        if ($found_by_title instanceof \WP_Post) {
+            return (int) $found_by_title->ID;
+        }
+
+        $candidate_slug = sanitize_title($candidate);
+
+        if ($candidate_slug !== '') {
+            $found_by_slug = get_page_by_path($candidate_slug, OBJECT, self::POST_TYPE);
+
+            if ($found_by_slug instanceof \WP_Post) {
+                return (int) $found_by_slug->ID;
             }
         }
 

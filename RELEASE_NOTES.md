@@ -1,5 +1,13 @@
 # Release Notes
 
+## v1.0.20 — 2026-02-25
+
+### Fixed
+- Improved Offering selection resolution so cards render reliably when Divi stores module values in alternate formats (ID, prefixed key, title, slug, URL/path, or delimited strings).
+
+### Technical
+- Refactored selection parsing in `DOM_Programs::resolve_program_selection()` to normalize and test multiple candidate values before falling back.
+
 ## v1.0.19 — 2026-02-25
 
 ### Fixed

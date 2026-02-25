@@ -22,10 +22,10 @@ class DOM_Programs
             self::POST_TYPE,
             array(
                 'labels' => array(
-                    'name' => __('Programs', 'divi-offering-module'),
-                    'singular_name' => __('Program', 'divi-offering-module'),
-                    'add_new_item' => __('Add Program', 'divi-offering-module'),
-                    'edit_item' => __('Edit Program', 'divi-offering-module'),
+                    'name' => __('Offerings', 'divi-offering-module'),
+                    'singular_name' => __('Offering', 'divi-offering-module'),
+                    'add_new_item' => __('Add Offering', 'divi-offering-module'),
+                    'edit_item' => __('Edit Offering', 'divi-offering-module'),
                 ),
                 'public' => true,
                 'show_ui' => true,
@@ -34,7 +34,7 @@ class DOM_Programs
                 'menu_icon' => 'dashicons-welcome-learn-more',
                 'supports' => array('title', 'thumbnail'),
                 'has_archive' => false,
-                'rewrite' => array('slug' => 'programs'),
+                'rewrite' => array('slug' => 'offerings'),
             )
         );
     }
@@ -43,7 +43,7 @@ class DOM_Programs
     {
         add_meta_box(
             'dom_program_details',
-            __('Program Details', 'divi-offering-module'),
+            __('Offering Details', 'divi-offering-module'),
             array(__CLASS__, 'render_details_metabox'),
             self::POST_TYPE,
             'normal',
@@ -76,12 +76,12 @@ class DOM_Programs
             </div>
             <div class="dom-field">
                 <label for="dom_subtitle"><?php esc_html_e('Subtitle / Tagline', 'divi-offering-module'); ?></label>
-                <input id="dom_subtitle" name="dom_subtitle" type="text" value="<?php echo esc_attr($meta['subtitle']); ?>" placeholder="adventure-powered learning.">
+                <input id="dom_subtitle" name="dom_subtitle" type="text" value="<?php echo esc_attr($meta['subtitle']); ?>" placeholder="Short subtitle or tagline">
             </div>
 
             <div class="dom-field">
                 <label for="dom_price"><?php esc_html_e('Price', 'divi-offering-module'); ?></label>
-                <input id="dom_price" name="dom_price" type="text" value="<?php echo esc_attr($meta['price']); ?>" placeholder="$528">
+                <input id="dom_price" name="dom_price" type="text" value="<?php echo esc_attr($meta['price']); ?>" placeholder="$99">
             </div>
             <div class="dom-field">
                 <label for="dom_frequency"><?php esc_html_e('Frequency', 'divi-offering-module'); ?></label>
@@ -90,26 +90,26 @@ class DOM_Programs
 
             <div class="dom-field">
                 <label for="dom_time"><?php esc_html_e('Time', 'divi-offering-module'); ?></label>
-                <input id="dom_time" name="dom_time" type="text" value="<?php echo esc_attr($meta['time']); ?>" placeholder="4–6pm">
+                <input id="dom_time" name="dom_time" type="text" value="<?php echo esc_attr($meta['time']); ?>" placeholder="4:00-6:00 PM">
             </div>
             <div class="dom-field">
                 <label for="dom_ages"><?php esc_html_e('Age Range', 'divi-offering-module'); ?></label>
-                <input id="dom_ages" name="dom_ages" type="text" value="<?php echo esc_attr($meta['ages']); ?>" placeholder="Ages 5–8">
+                <input id="dom_ages" name="dom_ages" type="text" value="<?php echo esc_attr($meta['ages']); ?>" placeholder="Ages 8-12">
             </div>
 
             <div class="dom-field" style="grid-column: span 2;">
                 <label for="dom_schedule"><?php esc_html_e('Schedule', 'divi-offering-module'); ?></label>
-                <input id="dom_schedule" name="dom_schedule" type="text" value="<?php echo esc_attr($meta['schedule']); ?>" placeholder="Tue & Thur, March 3–May 21">
+                <input id="dom_schedule" name="dom_schedule" type="text" value="<?php echo esc_attr($meta['schedule']); ?>" placeholder="Tuesdays and Thursdays, March-May">
             </div>
 
             <div class="dom-field" style="grid-column: span 2;">
                 <label for="dom_description"><?php esc_html_e('Description', 'divi-offering-module'); ?></label>
-                <textarea id="dom_description" name="dom_description" rows="6" placeholder="Program description"><?php echo esc_textarea($meta['description']); ?></textarea>
+                <textarea id="dom_description" name="dom_description" rows="6" placeholder="Offering description"><?php echo esc_textarea($meta['description']); ?></textarea>
             </div>
 
             <div class="dom-field">
                 <label for="dom_button_text"><?php esc_html_e('Button Text', 'divi-offering-module'); ?></label>
-                <input id="dom_button_text" name="dom_button_text" type="text" value="<?php echo esc_attr($meta['button_text']); ?>" placeholder="Join Little Crushers Club">
+                <input id="dom_button_text" name="dom_button_text" type="text" value="<?php echo esc_attr($meta['button_text']); ?>" placeholder="Learn More">
             </div>
             <div class="dom-field">
                 <label for="dom_button_url"><?php esc_html_e('Button URL', 'divi-offering-module'); ?></label>
@@ -233,9 +233,45 @@ class DOM_Programs
         $options = array();
 
         foreach ($posts as $item) {
-            $options[(string) $item->ID] = $item->post_title;
+            $options['program_' . (string) $item->ID] = $item->post_title;
         }
 
         return $options;
+    }
+
+    public static function resolve_program_selection(string $selected_program): int
+    {
+        $selected_program = trim($selected_program);
+
+        if ($selected_program === '') {
+            return 0;
+        }
+
+        if (is_numeric($selected_program)) {
+            $program_id = absint($selected_program);
+
+            return get_post_type($program_id) === self::POST_TYPE ? $program_id : 0;
+        }
+
+        if (strpos($selected_program, 'program_') === 0) {
+            $program_id = absint(substr($selected_program, 8));
+
+            return get_post_type($program_id) === self::POST_TYPE ? $program_id : 0;
+        }
+
+        $found_by_title = get_page_by_title($selected_program, OBJECT, self::POST_TYPE);
+
+        if ($found_by_title instanceof \WP_Post) {
+            return (int) $found_by_title->ID;
+        }
+
+        $slug = sanitize_title($selected_program);
+        $found_by_slug = get_page_by_path($slug, OBJECT, self::POST_TYPE);
+
+        if ($found_by_slug instanceof \WP_Post) {
+            return (int) $found_by_slug->ID;
+        }
+
+        return 0;
     }
 }

@@ -75,7 +75,7 @@
   color: white;
   text-transform: uppercase;
   background: var(--dom-badge-bg, #9a62f9);
-  font-size: 14px;
+  font-size: 21px;
   font-weight: 700;
   line-height: 1.8;
 }
@@ -269,11 +269,16 @@
   }
 
   .dom-program-card.offering .dom-media img {
-    min-height: 280px;
+    min-height: 0;
+    height: 320px;
   }
 }
 
 @media (max-width: 500px) {
+  .dom-program-card.offering .dom-media img {
+    height: 240px;
+  }
+
   .dom-program-card.offering .main-details {
     columns: 1;
   }

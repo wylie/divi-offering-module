@@ -1,5 +1,14 @@
 # Release Notes
 
+## v1.0.11 — 2026-02-25
+
+### Improved
+- Reduced mobile card image height to avoid overly tall images on smaller viewports.
+- Increased offering pill text size from `14px` to `21px`.
+
+### Technical
+- Updated plugin version metadata to `1.0.11` in `divi-offering-module.php`.
+
 ## v1.0.10 — 2026-02-25
 
 ### Improved

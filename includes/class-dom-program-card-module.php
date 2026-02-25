@@ -84,14 +84,18 @@ class DOM_Program_Card_Module extends ET_Builder_Module
             esc_attr($meta['mobile_image_position'])
         );
 
+        $media_style = '';
+
+        if ($image_url) {
+            $media_style = sprintf(' style="--dom-media-image:url(%s);"', esc_url($image_url));
+        } else {
+            $media_style = ' style="display:none;"';
+        }
+
         ob_start();
         ?>
         <article class="<?php echo esc_attr(implode(' ', $classes)); ?>" style="<?php echo esc_attr($styles); ?>">
-            <div class="dom-media side left"<?php if (! $image_url) { echo ' style="display:none;"'; } ?>>
-                <?php if ($image_url) : ?>
-                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($title); ?>">
-                <?php endif; ?>
-            </div>
+            <div class="dom-media side left"<?php echo $media_style; ?> role="img" aria-label="<?php echo esc_attr($title); ?>"></div>
 
             <div class="side right">
             <div class="dom-content info">

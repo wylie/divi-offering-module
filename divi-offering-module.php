@@ -11,31 +11,31 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('LCDM_VERSION', '1.0.0');
-define('LCDM_FILE', __FILE__);
-define('LCDM_DIR', plugin_dir_path(__FILE__));
-define('LCDM_URL', plugin_dir_url(__FILE__));
+define('DOM_VERSION', '1.0.0');
+define('DOM_FILE', __FILE__);
+define('DOM_DIR', plugin_dir_path(__FILE__));
+define('DOM_URL', plugin_dir_url(__FILE__));
 
-require_once LCDM_DIR . 'includes/class-lcdm-programs.php';
-require_once LCDM_DIR . 'includes/class-lcdm-divi-module.php';
+require_once DOM_DIR . 'includes/class-dom-programs.php';
+require_once DOM_DIR . 'includes/class-dom-divi-module.php';
 
-LCDM_Programs::init();
-LCDM_Divi_Module::init();
+DOM_Programs::init();
+DOM_Divi_Module::init();
 
 add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style(
-        'lcdm-module-styles',
-        LCDM_URL . 'assets/css/lcdm-module.css',
+        'dom-module-styles',
+        DOM_URL . 'assets/css/dom-module.css',
         array(),
-        LCDM_VERSION
+        DOM_VERSION
     );
 });
 
 add_action('admin_enqueue_scripts', function () {
     wp_enqueue_style(
-        'lcdm-module-styles-admin',
-        LCDM_URL . 'assets/css/lcdm-module.css',
+        'dom-module-styles-admin',
+        DOM_URL . 'assets/css/dom-module.css',
         array(),
-        LCDM_VERSION
+        DOM_VERSION
     );
 });

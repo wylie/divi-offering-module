@@ -27,7 +27,7 @@
 }
 
 .dom-content {
-  padding: 20px 24px;
+  padding: 26px 30px;
   color: #2f2f2f;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .dom-subtitle {
-  margin: 8px 0 16px;
+  margin: 10px 0 20px;
   font-size: 18px;
   font-style: italic;
 }
@@ -59,7 +59,7 @@
 .dom-details-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px 14px;
+  gap: 10px 22px;
 }
 
 .dom-detail-item {
@@ -83,9 +83,14 @@
 }
 
 .dom-detail-item .dom-icon i {
-  font-size: 20px;
-  line-height: 1;
-  color: inherit;
+  display: none;
+}
+
+.dom-detail-item .dom-icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  fill: currentColor;
 }
 
 .dom-full-width {
@@ -94,7 +99,7 @@
 
 .dom-divider {
   border-top: 1px solid rgba(0, 0, 0, 0.18);
-  margin: 16px 0 18px;
+  margin: 18px 0 20px;
 }
 
 .dom-description {
@@ -105,16 +110,16 @@
 
 .dom-button {
   display: block;
-  margin-top: 18px;
+  margin-top: 22px;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.3px;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
   color: #303030;
   text-decoration: none;
   border: 2px solid var(--dom-button-border, #555555);
-  padding: 12px 14px;
+  padding: 14px 16px;
   border-radius: 3px;
 }
 

@@ -154,7 +154,7 @@
   display: block;
   position: relative;
   margin-top: 1rem;
-  text-align: center;
+  text-align: left;
 }
 
 .dom-program-card.offering .link-ext:hover,

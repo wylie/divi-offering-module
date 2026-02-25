@@ -57,8 +57,10 @@ class DOM_Program_Card_Module extends ET_Builder_Module
         $meta = DOM_Programs::get_program_meta($program_id);
         $image_url = get_the_post_thumbnail_url($program_id, 'large');
         $image_side = ! empty($this->props['image_side_override']) ? $this->props['image_side_override'] : $meta['image_side'];
+        $type_label = DOM_Programs::get_type_label((string) $meta['type']);
+        $pill_text = $this->resolve_pill_text($title, $type_label, (string) $meta['badge']);
 
-        $variant_slug = $this->resolve_variant_slug($meta['badge']);
+        $variant_slug = $this->resolve_variant_slug($type_label);
         $classes = array(
             'dom-program-card',
             'offering',
@@ -92,8 +94,8 @@ class DOM_Program_Card_Module extends ET_Builder_Module
 
             <div class="side right">
             <div class="dom-content info">
-                <?php if (! empty($meta['badge'])) : ?>
-                    <div class="dom-badge location"><?php echo esc_html($meta['badge']); ?></div>
+                <?php if ($pill_text !== '') : ?>
+                    <div class="dom-badge location"><?php echo esc_html($pill_text); ?></div>
                 <?php endif; ?>
 
                 <div class="heading">
@@ -179,5 +181,17 @@ class DOM_Program_Card_Module extends ET_Builder_Module
         $slug = sanitize_title($badge);
 
         return in_array($slug, $allowed_variants, true) ? $slug : '';
+    }
+
+    private function resolve_pill_text(string $title, string $type_label, string $legacy_badge): string
+    {
+        $title = trim($title);
+        $type_label = trim($type_label);
+
+        if ($type_label !== '') {
+            return trim($type_label . ' ' . $title);
+        }
+
+        return trim($legacy_badge);
     }
 }

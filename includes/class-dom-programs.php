@@ -8,12 +8,64 @@ class DOM_Programs
 {
     const POST_TYPE = 'dom_program';
     const NONCE_KEY = 'dom_program_nonce';
+    const TYPE_OPTION_KEY = 'dom_offering_types';
 
     public static function init(): void
     {
         add_action('init', array(__CLASS__, 'register_post_type'));
         add_action('add_meta_boxes', array(__CLASS__, 'register_meta_boxes'));
         add_action('save_post_' . self::POST_TYPE, array(__CLASS__, 'save_meta'), 10, 2);
+        add_action('admin_menu', array(__CLASS__, 'register_admin_menu'));
+    }
+
+    public static function register_admin_menu(): void
+    {
+        add_submenu_page(
+            'edit.php?post_type=' . self::POST_TYPE,
+            __('Offering Types', 'divi-offering-module'),
+            __('Types', 'divi-offering-module'),
+            'manage_options',
+            'dom-offering-types',
+            array(__CLASS__, 'render_types_page')
+        );
+    }
+
+    public static function render_types_page(): void
+    {
+        if (! current_user_can('manage_options')) {
+            return;
+        }
+
+        $saved = false;
+
+        if (
+            isset($_POST['dom_types_nonce'])
+            && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['dom_types_nonce'])), 'dom_save_types')
+        ) {
+            $raw_types = isset($_POST['dom_type_labels']) ? sanitize_textarea_field(wp_unslash($_POST['dom_type_labels'])) : '';
+            $labels = self::parse_type_labels($raw_types);
+            update_option(self::TYPE_OPTION_KEY, $labels, false);
+            $saved = true;
+        }
+
+        $type_labels = self::get_type_labels();
+        $type_lines = implode("\n", $type_labels);
+        ?>
+        <div class="wrap">
+            <h1><?php esc_html_e('Offering Types', 'divi-offering-module'); ?></h1>
+            <?php if ($saved) : ?>
+                <div class="notice notice-success is-dismissible"><p><?php esc_html_e('Types updated.', 'divi-offering-module'); ?></p></div>
+            <?php endif; ?>
+            <p><?php esc_html_e('These values populate the Type select in Add Offering. Enter one type per line.', 'divi-offering-module'); ?></p>
+            <form method="post">
+                <?php wp_nonce_field('dom_save_types', 'dom_types_nonce'); ?>
+                <textarea name="dom_type_labels" rows="10" class="large-text code"><?php echo esc_textarea($type_lines); ?></textarea>
+                <p>
+                    <button type="submit" class="button button-primary"><?php esc_html_e('Save Types', 'divi-offering-module'); ?></button>
+                </p>
+            </form>
+        </div>
+        <?php
     }
 
     public static function register_post_type(): void
@@ -71,8 +123,13 @@ class DOM_Programs
 
         <div class="dom-grid">
             <div class="dom-field">
-                <label for="dom_badge"><?php esc_html_e('Badge Label', 'divi-offering-module'); ?></label>
-                <input id="dom_badge" name="dom_badge" type="text" value="<?php echo esc_attr($meta['badge']); ?>" placeholder="Title">
+                <label for="dom_type"><?php esc_html_e('Type', 'divi-offering-module'); ?></label>
+                <select id="dom_type" name="dom_type">
+                    <option value=""><?php esc_html_e('Select a Type', 'divi-offering-module'); ?></option>
+                    <?php foreach (self::get_type_options() as $value => $label) : ?>
+                        <option value="<?php echo esc_attr($value); ?>" <?php selected($meta['type'], $value); ?>><?php echo esc_html($label); ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <div class="dom-field">
                 <label for="dom_subtitle"><?php esc_html_e('Subtitle / Tagline', 'divi-offering-module'); ?></label>
@@ -168,6 +225,7 @@ class DOM_Programs
 
         $text_fields = array(
             'badge',
+            'type',
             'subtitle',
             'price',
             'frequency',
@@ -181,6 +239,12 @@ class DOM_Programs
         foreach ($text_fields as $field) {
             $key = 'dom_' . $field;
             $val = isset($_POST[$key]) ? sanitize_text_field(wp_unslash($_POST[$key])) : '';
+
+            if ($field === 'type') {
+                $allowed = array_keys(self::get_type_options());
+                $val = in_array($val, $allowed, true) ? $val : '';
+            }
+
             update_post_meta($post_id, $key, $val);
         }
 
@@ -203,6 +267,7 @@ class DOM_Programs
     {
         return array(
             'badge' => get_post_meta($post_id, 'dom_badge', true),
+            'type' => get_post_meta($post_id, 'dom_type', true),
             'subtitle' => get_post_meta($post_id, 'dom_subtitle', true),
             'price' => get_post_meta($post_id, 'dom_price', true),
             'frequency' => get_post_meta($post_id, 'dom_frequency', true),
@@ -218,6 +283,74 @@ class DOM_Programs
             'accent_color' => get_post_meta($post_id, 'dom_accent_color', true) ?: '#AF4F27',
             'button_border_color' => get_post_meta($post_id, 'dom_button_border_color', true) ?: '#555555',
         );
+    }
+
+    public static function get_type_options(): array
+    {
+        $labels = self::get_type_labels();
+        $options = array();
+
+        foreach ($labels as $label) {
+            $value = sanitize_title($label);
+
+            if ($value === '' || isset($options[$value])) {
+                continue;
+            }
+
+            $options[$value] = $label;
+        }
+
+        return $options;
+    }
+
+    public static function get_type_label(string $type_value): string
+    {
+        $options = self::get_type_options();
+
+        return isset($options[$type_value]) ? (string) $options[$type_value] : '';
+    }
+
+    private static function get_type_labels(): array
+    {
+        $saved = get_option(self::TYPE_OPTION_KEY, array('Activity'));
+
+        if (! is_array($saved)) {
+            return array('Activity');
+        }
+
+        $labels = array();
+
+        foreach ($saved as $label) {
+            $label = trim((string) $label);
+
+            if ($label === '') {
+                continue;
+            }
+
+            $labels[] = $label;
+        }
+
+        return ! empty($labels) ? array_values(array_unique($labels)) : array('Activity');
+    }
+
+    private static function parse_type_labels(string $raw_types): array
+    {
+        $lines = preg_split('/\r\n|\r|\n/', $raw_types) ?: array();
+        $labels = array();
+
+        foreach ($lines as $line) {
+            $label = trim((string) $line);
+
+            if ($label === '') {
+                continue;
+            }
+
+            $labels[] = sanitize_text_field($label);
+        }
+
+        $labels = array_values(array_unique($labels));
+
+        return ! empty($labels) ? $labels : array('Activity');
     }
 
     public static function get_program_options(): array

@@ -1,5 +1,19 @@
 # Release Notes
 
+## v1.0.9 — 2026-02-25
+
+### Added
+- Added configurable Offering Types under **Offerings > Types**.
+- Added a **Type** select field to **Add/Edit Offering** populated from the configurable Types list.
+
+### Improved
+- Made the top pill text dynamic by rendering **Type + Offering Title** (with legacy badge fallback).
+- Updated CTA button text alignment to left for closer visual parity with the requested design.
+
+### Technical
+- Added Type option storage and sanitization helpers in `DOM_Programs`.
+- Preserved backward compatibility by falling back to legacy `Badge Label` meta when Type is not selected.
+
 ## v1.0.8 — 2026-02-25
 
 ### Improved

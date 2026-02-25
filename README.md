@@ -8,7 +8,7 @@ A WordPress plugin that provides:
 ## Editable fields (WP Admin > Programs)
 
 - Featured Image
-- Badge label
+- Type (select)
 - Program title (post title)
 - Subtitle/tagline
 - Price
@@ -23,6 +23,12 @@ A WordPress plugin that provides:
 - Card background color
 - Accent color
 - Button border color
+
+## Manage Type options
+
+- Go to **Offerings > Types**
+- Add one Type label per line (for example: Activity, Membership, Camp)
+- Save to update the **Type** dropdown shown in **Add Offering**
 
 ## Install
 

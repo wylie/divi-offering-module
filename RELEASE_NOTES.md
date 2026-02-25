@@ -1,5 +1,13 @@
 # Release Notes
 
+## v1.0.22 — 2026-02-25
+
+### Fixed
+- Corrected module fallback selection behavior to avoid using non-selection metadata values (for example `program_id_last_edited`) as the active offering.
+
+### Technical
+- Updated `DOM_Program_Card_Module` to evaluate candidates by resolvable offering ID and only accept values that map to a valid `dom_program` post.
+
 ## v1.0.21 — 2026-02-25
 
 ### Fixed

@@ -46,8 +46,7 @@ class DOM_Program_Card_Module extends ET_Builder_Module
 
     public function render($attrs, $content = null, $render_slug = ''): string
     {
-        $selected_program = $this->resolve_selected_program($attrs);
-        $program_id = DOM_Programs::resolve_program_selection($selected_program);
+        $program_id = $this->resolve_selected_program_id($attrs);
 
         if (! $program_id || get_post_type($program_id) !== DOM_Programs::POST_TYPE) {
             return '<div class="dom-program-card dom-empty">' . esc_html__('Select an Offering in module settings.', 'divi-offering-module') . '</div>';
@@ -199,7 +198,7 @@ class DOM_Program_Card_Module extends ET_Builder_Module
         return trim($legacy_badge);
     }
 
-    private function resolve_selected_program($attrs): string
+    private function resolve_selected_program_id($attrs): int
     {
         $candidate_values = array();
         $lookup_keys = array(
@@ -237,14 +236,22 @@ class DOM_Program_Card_Module extends ET_Builder_Module
             }
         }
 
-        foreach ($candidate_values as $candidate) {
-            $candidate = trim($candidate);
+        $candidate_values = array_values(array_unique($candidate_values));
 
-            if ($candidate !== '') {
-                return $candidate;
+        foreach ($candidate_values as $candidate) {
+            $candidate = trim((string) $candidate);
+
+            if ($candidate === '') {
+                continue;
+            }
+
+            $program_id = DOM_Programs::resolve_program_selection($candidate);
+
+            if ($program_id > 0) {
+                return $program_id;
             }
         }
 
-        return '';
+        return 0;
     }
 }

@@ -1,5 +1,14 @@
 # Release Notes
 
+## v1.0.15 — 2026-02-25
+
+### Fixed
+- Updated desktop offering card image behavior so image height follows the non-image/text side height instead of using a fixed minimum image height.
+
+### Technical
+- Updated layout rules in `assets/css/dom-module.css` to remove the desktop fixed image min-height and allow equal-height column stretching.
+- Updated plugin version metadata to `1.0.15` in `divi-offering-module.php`.
+
 ## v1.0.14 — 2026-02-25
 
 ### Fixed

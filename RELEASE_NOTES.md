@@ -1,5 +1,16 @@
 # Release Notes
 
+## v1.0.8 — 2026-02-25
+
+### Improved
+- Converted module markup to align more closely with the legacy Offering block structure (`offering`, `side`, `info`, `location`, `main-details`, `link-ext`).
+- Updated styling to match the legacy layout/typography, including two-column details and legacy button hover behavior.
+- Reintroduced Divi `ETmodules` icon mapping on detail rows for closer parity with the old design system.
+
+### Technical
+- Updated plugin version metadata to `1.0.8` in `divi-offering-module.php`.
+- Tagged release as `v1.0.8`.
+
 ## v1.0.7 — 2026-02-25
 
 ### Fixed

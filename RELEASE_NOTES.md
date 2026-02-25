@@ -1,5 +1,15 @@
 # Release Notes
 
+## v1.0.16 — 2026-02-25
+
+### Fixed
+- Corrected desktop offering cards where image-left layouts could leave an empty gray area below the image.
+- Ensured the image wrapper and image fill the full stretched column height so image height consistently follows the text side.
+
+### Technical
+- Updated desktop layout rules in `assets/css/dom-module.css` (`.left` and `.dom-media`) to use flex-based height fill.
+- Updated plugin version metadata to `1.0.16` in `divi-offering-module.php`.
+
 ## v1.0.15 — 2026-02-25
 
 ### Fixed

@@ -23,12 +23,13 @@
 }
 
 .dom-program-card.offering .left {
+  display: flex;
   padding: 0;
   min-width: 300px;
 }
 
 .dom-program-card.offering .dom-media {
-  height: 100%;
+  flex: 1 1 auto;
 }
 
 .dom-program-card.offering .dom-media img {

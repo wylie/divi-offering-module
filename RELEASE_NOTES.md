@@ -1,5 +1,15 @@
 # Release Notes
 
+## v1.0.19 — 2026-02-25
+
+### Fixed
+- Corrected plugin version metadata so WordPress recognizes this build as a newer release.
+- Switched release packaging guidance to preserve the plugin root folder, preventing uploads from installing as a separate plugin entry.
+
+### Technical
+- Updated plugin header `Version` and `DOM_VERSION` to `1.0.19` in `divi-offering-module.php`.
+- Recommended packaging command now uses archive root folder preservation.
+
 ## v1.0.16 — 2026-02-25
 
 ### Fixed

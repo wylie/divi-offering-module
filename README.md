@@ -48,7 +48,7 @@ A WordPress plugin that provides:
 ## Deploy to remote WordPress
 
 1. In terminal, from the parent directory, run:
-   - `zip -r divi-offering-module.zip divi-offering-module`
+   - `cd divi-offering-module && git archive --format=zip --prefix=divi-offering-module/ --output ../divi-offering-module.zip HEAD`
 2. In remote WP Admin, go to **Plugins > Add New > Upload Plugin**.
 3. Upload ZIP and activate (or replace existing version).
 

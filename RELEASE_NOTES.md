@@ -1,5 +1,14 @@
 # Release Notes
 
+## v1.0.13 — 2026-02-25
+
+### Fixed
+- Resolved duplicate text appearing in the top pill by avoiding class-name collisions with generic `location` styles.
+
+### Technical
+- Updated pill class from `location` to `dom-location` in module markup and CSS.
+- Updated plugin version metadata to `1.0.13` in `divi-offering-module.php`.
+
 ## v1.0.12 — 2026-02-25
 
 ### Added

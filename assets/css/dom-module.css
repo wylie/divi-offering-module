@@ -29,7 +29,7 @@
 }
 
 .dom-program-card.offering .dom-media {
-  flex: 1 1 auto;
+  flex: 1 1 50%;
 }
 
 .dom-program-card.offering .dom-media img {

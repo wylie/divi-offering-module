@@ -58,7 +58,7 @@ class DOM_Program_Card_Module extends ET_Builder_Module
         $image_url = get_the_post_thumbnail_url($program_id, 'large');
         $image_side = ! empty($this->props['image_side_override']) ? $this->props['image_side_override'] : $meta['image_side'];
         $type_label = DOM_Programs::get_type_label((string) $meta['type']);
-        $pill_text = $this->resolve_pill_text($title, $type_label, (string) $meta['badge']);
+        $pill_text = $this->resolve_pill_text($type_label, (string) $meta['badge']);
 
         $variant_slug = $this->resolve_variant_slug($type_label);
         $classes = array(
@@ -183,13 +183,12 @@ class DOM_Program_Card_Module extends ET_Builder_Module
         return in_array($slug, $allowed_variants, true) ? $slug : '';
     }
 
-    private function resolve_pill_text(string $title, string $type_label, string $legacy_badge): string
+    private function resolve_pill_text(string $type_label, string $legacy_badge): string
     {
-        $title = trim($title);
         $type_label = trim($type_label);
 
         if ($type_label !== '') {
-            return trim($type_label . ' ' . $title);
+            return $type_label;
         }
 
         return trim($legacy_badge);

@@ -1,5 +1,14 @@
 # Release Notes
 
+## v1.0.10 — 2026-02-25
+
+### Improved
+- Updated pill rendering to show only the selected **Type** label for cleaner output.
+- Kept backward compatibility fallback to legacy badge text when Type is not selected.
+
+### Technical
+- Updated plugin version metadata to `1.0.10` in `divi-offering-module.php`.
+
 ## v1.0.9 — 2026-02-25
 
 ### Added
